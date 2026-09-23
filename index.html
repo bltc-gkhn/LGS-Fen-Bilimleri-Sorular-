@@ -3,48 +3,420 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soru Bankası</title>
+    <title>12 Soruluk Soru Bankam</title>
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .container { max-width: 650px; width: 100%; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
-        h1 { text-align: center; color: #2c3e50; margin-bottom: 25px; font-size: 24px; }
-        .question-card { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
-        .question-text { font-weight: 600; font-size: 16px; margin-bottom: 15px; color: #2c3e50; }
-        .options { display: flex; flex-direction: column; gap: 10px; }
-        .option-btn { background: #fff; border: 1px solid #cbd5e1; padding: 12px 15px; border-radius: 6px; text-align: left; font-size: 14px; cursor: pointer; transition: all 0.2s; }
-        .option-btn:hover { background: #edf2f7; }
-        .option-btn.correct { background-color: #d1fae5; border-color: #10b981; color: #065f46; font-weight: bold; }
-        .option-btn.wrong { background-color: #fee2e2; border-color: #ef4444; color: #991b1b; }
-        .answer-box { margin-top: 12px; padding: 10px; background: #e0f2fe; border-left: 4px solid #0284c7; border-radius: 4px; font-size: 14px; display: none; }
+       <!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LGS Fen Bilimleri Soru Bankası</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+    body { background-color: #f3f4f6; color: #1f2937; display: flex; justify-content: center; padding: 20px; }
+    .app-container { background: #ffffff; width: 100%; max-width: 680px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; border: 1px solid #e5e7eb; }
+    
+    /* Üst Başlık & Gezinme */
+    .header { background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 16px; text-align: center; font-weight: bold; font-size: 1.1rem; }
+    .sub-header { background: #f5f3ff; padding: 10px 16px; display: flex; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid #ede9fe; align-items: center; justify-content: space-between; }
+    .badge-group { display: flex; gap: 6px; flex-wrap: wrap; }
+    .badge { background: #ddd6fe; color: #5b21b6; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+    
+    /* Soru Alanı */
+    .question-body { padding: 20px; }
+    .question-text { font-size: 1rem; line-height: 1.5; font-weight: 600; margin-bottom: 12px; color: #111827; white-space: pre-line; }
+    
+    /* Görsel Alanı */
+    .image-container { text-align: center; margin: 12px 0; background: #fafafa; padding: 12px; border-radius: 12px; border: 1px dashed #d1d5db; min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .image-container img { max-width: 100%; height: auto; border-radius: 8px; }
+    .image-fallback { font-size: 0.85rem; color: #6b7280; font-style: italic; }
+
+    /* Şıklar */
+    .options-list { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+    .option-btn { display: flex; align-items: center; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; background: white; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; text-align: left; width: 100%; }
+    .option-btn:hover { border-color: #8b5cf6; background: #faf5ff; }
+    .option-btn.selected { border-color: #7c3aed; background: #f3e8ff; font-weight: bold; }
+    .option-btn.correct { border-color: #10b981; background: #ecfdf5; color: #065f46; font-weight: bold; }
+    .option-btn.wrong { border-color: #ef4444; background: #fef2f2; color: #991b1b; }
+    
+    .option-img { max-height: 180px; max-width: 85%; width: auto; object-fit: contain; margin-left: 8px; border-radius: 4px; }
+
+    /* Butonlar */
+    .actions { padding: 16px 20px; background: #fafafa; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .nav-btn { background: #4f46e5; color: white; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
+    .nav-btn:hover:not(:disabled) { background: #4338ca; }
+    .nav-btn:disabled { background: #d1d5db; color: #9ca3af; cursor: not-allowed; }
+    .btn-check { background: #10b981; color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
+    .btn-check:hover { background: #059669; }
+    
+    /* Çözüm Paneli */
+    .solution-panel { display: none; padding: 20px; background: #f8fafc; border-top: 2px solid #e2e8f0; }
+    .solution-header { font-weight: bold; font-size: 0.95rem; margin-bottom: 8px; color: #0f172a; }
+    .solution-content { font-size: 0.9rem; line-height: 1.6; color: #334155; }
+    .solution-img { max-width: 100%; margin-top: 10px; border-radius: 8px; border: 1px solid #cbd5e1; }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <div class="header">⚛️ LGS FEN BİLİMLERİ SORU BANKASI</div>
+  
+  <div class="sub-header">
+    <div class="badge-group">
+      <span class="badge" id="badgeUnit">Ünite</span>
+      <span class="badge" id="badgeTopic">Konu</span>
+    </div>
+    <span class="badge" style="background:#7c3aed; color:white;" id="badgeNumber">Soru: 1/12 • 2023 LGS</span>
+  </div>
+
+  <div class="question-body">
+    <div class="question-text" id="qText1"></div>
+
+    <div class="image-container" id="imageBox">
+      <img id="qImage" src="" alt="Soru Görseli" onerror="handleImageError()">
+      <div id="fallbackText" class="image-fallback" style="display:none;">
+        ⚠️ <b id="missingImageName">soru_1.png</b> resmi bulunamadı.<br>Orijinal resmi bu klasöre aynı isimle koyabilirsiniz.
+      </div>
+    </div>
+
+    <div class="question-text" id="qText2"></div>
+
+    <div class="options-list" id="optionsContainer"></div>
+  </div>
+
+  <div class="actions">
+    <button class="nav-btn" id="prevBtn" onclick="changeQuestion(-1)">⬅️ Önceki Soru</button>
+    <button class="btn-check" onclick="checkAnswer()">Cevabı Kontrol Et</button>
+    <button class="nav-btn" id="nextBtn" onclick="changeQuestion(1)">Sonraki Soru ➔</button>
+  </div>
+
+  <div class="solution-panel" id="solutionPanel">
+    <div class="solution-header">📝 Çözüm Açıklaması</div>
+    <div id="textSolution" class="solution-content"></div>
+  </div>
+</div>
+
+<script>
+  const questionBank = [
+    {
+      year: "2023 LGS",
+      unit: `1. ÜNİTE: MEVSİMLER VE İKLİM`,
+      topic: `Güneş Işınlarının Gelme Açısı`,
+      image: `soru_1.png`,
+      text1: `Temmuz ayındaki bir günde K ve L şehirlerinde yatay bir yere dik olacak şekilde sabitlenen özdeş iki çubuğun gölge boyları öğle saatinde ölçülüyor. K şehrindeki çubuğun gölge boyunun L şehrindeki çubuğun gölge boyundan daha uzun olduğu gözlemleniyor.`,
+      text2: `Buna göre K ve L şehirlerinin Yerküre üzerindeki konumları, verilenlerden hangilerindeki gibi olabilir?`,
+      optionsType: `text`,
+      options: [
+        `Yalnız I`,
+        `I ve II`,
+        `I ve III`,
+        `II ve III`
+      ],
+      correct: 1, // B Şıkkı
+      solution: `<b>Doğru Cevap: B</b><br><br><b>Çözüm Açıklaması:</b><br>III. olamaz çünkü iki şehir de Güney Yarım Küre'dedir. Temmuz ayında GYK'de kış olacağı için III. olan şıkları eleriz.<br><br>I. Şekil kesinlikle doğrudur çünkü L şehri Kuzey Yarım Küre'de ve mevsim yaz olduğu için gölge boyu kısa, K şehri Güney Yarım Küre'de ve mevsim kış olduğu için gölge boyu uzun olur.<br><br>II. de olabilir çünkü K şehri Kuzey Yarım Küre'nin kutup tarafındadır; bu yüzden güneş ışınları oraya eğik açıyla gelir. L şehrine ise daha dik açıyla geleceği için gölge boyu kısa olur.`
+    },
+    {
+      year: "2023 LGS",
+      unit: `1. ÜNİTE: MEVSİMLER VE İKLİM`,
+      topic: `İklim ve Hava Hareketleri`,
+      image: `soru_2.png`,
+      text1: `K, L, M ve N şehirlerinin Yerküre üzerinde bulunduğu yerler ile Yerküre’nin Güneş’e göre olan konumu şekildeki gibidir.`,
+      text2: `Buna göre, bu şehirlerde yaşanan mevsimlerle ilgili aşağıdakilerden hangisi doğrudur?`,
+      optionsType: `text`,
+      options: [
+        `L’de kış yaşanır.`,
+        `M’de yaz yaşanır.`,
+        `N’de kış yaşanır.`,
+        `K’de yaz yaşanır.`
+      ],
+      correct: 0,
+      solution: `<b>Doğru Cevap: A</b><br><br>Şekilde Güneş ve Dünya'nın konumları dikkate alındığında (GYK Güneş'e yatık halde) KYK'de kış, GYK'de yaz mevsimi yaşandığı anlaşılıyor. Bu durumda L şehrinde kış yaşandığı anlaşılır.`
+    },
+    {
+      year: "2020 LGS",
+      unit: `1. ÜNİTE: MEVSİMLER VE İKLİM`,
+      topic: `İklim ve Hava Hareketleri`,
+      image: `soru_3.png`,
+      text1: `Yere dik olarak duran bir cismin gölge boyu bir yıl boyunca belirli aralıklarla ölçülerek şekildeki grafik elde ediliyor.`,
+      text2: `Dünya’nın Güneş’e göre olan konumları aşağıdakilerden hangisi gibi olursa mart ve haziran ayları arasında geçen sürede gölge boyu değişimi grafikteki gibi olur?`,
+      optionsType: `image`,
+      options: [
+        `soru_3_a.png`,
+        `soru_3_b.png`,
+        `soru_3_c.png`,
+        `soru_3_d.png`
+      ],
+      correct: 0,
+      solution: `<b>Doğru Cevap: A</b><br><br><b>Çözüm Açıklaması:</b><br>Grafikte verilen gölge boylarında Haziran ayında gölge boyunun en kısa Aralık ayında ise gölge boyunun en uzun olduğu görülüyor. Bu durumda Haziran ayında yaz Mart ayında İlkbahar olan şekil doğru cevaptır.`
+    },
+    {
+      year: "2020 LGS",
+      unit: `1. ÜNİTE: MEVSİMLER VE İKLİM`,
+      topic: `İklim ve Hava Hareketleri`,
+      image: `soru_4.png`,
+      text1: `Dünya 21 Aralık tarihindeki konumundayken Ekvator’a eşit uzaklıkta ve deniz seviyesinde bulunan iki şehrin konumu şekil üzerinde numaralandırılarak verilmiştir.`,
+      text2: `Buna göre bu şehirlerdeki birim yüzeye Güneş ışınları ile aktarılan enerji miktarları aşağıdaki grafiklerin hangisinde doğru verilmiştir?`,
+      optionsType: `image`,
+      options: [
+        `soru_4_a.png`,
+        `soru_4_b.png`,
+        `soru_4_c.png`,
+        `soru_4_d.png`
+      ],
+      correct: 0,
+      solutionImage: `soru_4_cozum.png`,
+      solution: `<b>Doğru Cevap: A</b><br><br><b>Çözüm Açıklaması:</b><br>21 Aralık tarihinde kuzey yarım kürede kış, güney yarım kürede yaz yaşanır. Bu durumda 21 Aralıkta I. Şehirde enerji miktarı az, II. Şehirde ise enerji miktarı çok olmalıdır.`
+    },
+    {
+      year: "2024 LGS",
+      unit: `1. ÜNİTE: MEVSİMLER VE İKLİM`,
+      topic: `Mevsimlerin Oluşumu`,
+      image: ``, 
+      text1: `Yerküre üzerinde eş yükseltideki K ve L şehirlerinde yılın belirli bir ayındaki sıcaklık ortalamalarının eşit olduğu belirlenmiştir. Bu şehirlerde yaşanan mevsimin de aynı olduğu bilinmektedir.\n\nBuna göre bu şehirlerle ilgili,\nI. Farklı yarım kürelerde yer alırlar.\nII. Ekvator’a olan uzaklıkları birbirine eşittir.\nIII. Her iki şehre Güneş ışınlarının gelme açısı aynıdır.`,
+      text2: `yargılarından hangileri doğru olabilir?`,
+      optionsType: `text`,
+      options: [
+        `Yalnız III`,
+        `I ve II`,
+        `II ve III`,
+        `I, II ve III`
+      ],
+      correct: 2, // C Şıkkı
+      solution: `<b>Doğru Cevap: C</b><br><br><b>Çözüm Açıklaması:</b><br>Eşit yükseklikte ve belli bir ayda ortalama sıcaklıkları aynı olan K ve L şehirlerinde mevsim aynı olduğuna göre bu şehirler aynı yarım kürede olmalıdır. Aynı yarım kürede olan bu şehirlerin Ekvatora olan uzaklıkları ve güneş ışınlarının gelme açıları da eşit olur.`
+    },
+    {
+      year: "2023 LGS",
+      unit: `1. ÜNİTE: MEVSİMLER VE İKLİM`,
+      topic: `İklim ve Hava Hareketleri`,
+      image: ``, 
+      text1: `Hava olayları, belirli bir bölgede kısa sürelerde etkili olan olaylardır. İklim ise bu hava olaylarının uzun yıllar boyunca daha geniş bölgelerde gözlemlenmesiyle elde edilen verilerin ortalamasıdır.\n\nBuna göre,\nI. Bu yılın kış aylarında kar yağışı az oldu.\nII. Yaşadığım yerde yazlar sıcak ve kurak, kışlar ılık ve yağışlıdır.\nIII. Bir hafta boyunca şiddetli rüzgâr bekleniyor.`,
+      text2: `yargılarından hangileri iklimle ilgilidir?`,
+      optionsType: `text`,
+      options: [
+        `Yalnız I`,
+        `Yalnız II`,
+        `I ve II`,
+        `II ve III`
+      ],
+      correct: 1, // B Şıkkı
+      solution: `<b>Doğru Cevap: B</b><br><br><b>Çözüm Açıklaması:</b><br><b>I. öncül:</b> Sadece bu yıla (1 yıllık veriye) dayandığı için hava olayı / kısa süreli durumdur, iklim değildir.<br><b>II. öncül:</b> Bölgenin uzun süreli hava şartlarının ortalamasını tarif ettiği için iklimle ilgilidir.<br><b>III. öncül:</b> Bir haftalık kısa bir süreyi ve tahmini içerdiği için hava olayıdır.`
+    },
+    {
+      year: "2021 LGS",
+      unit: `1. ÜNİTE: MEVSİMLER VE İKLİM`,
+      topic: `Mevsimlerin Oluşumu`,
+      image: ``, 
+      text1: `K ve L bölgelerinin Dünya’daki konumlarıyla ilgili verilen bilgiler şu şekildedir:\n• Birinin Kuzey, diğerinin Güney yarım kürede olduğu bilinmektedir.\n• Ekvator’a olan uzaklıkları bilinmemektedir.\n• Hangi ay ve gün yapıldığı bilinmeyen ancak aynı günde yapılan sıcaklık ölçümünde K bölgesindeki sıcaklığın L bölgesinden daha fazla olduğu bilinmektedir.`,
+      text2: `Bu bilgilere göre K ve L bölgelerinde sıcaklık ölçümünün yapıldığı günde yaşanan mevsimlerin belirlenmesiyle ilgili aşağıdaki yargılardan hangisi doğrudur?`,
+      optionsType: `text`,
+      options: [
+        `K bölgesinin Güney yarım kürede olduğu bilinirse bu bölgede yaz mevsimi yaşandığı belirlenebilir.`,
+        `Bölgelerin bulunduğu yarım küreler bilinse de yaşanan mevsimler belirlenemez.`,
+        `Bölgelerin Ekvator’a olan uzaklıklarının eşit olduğu bilinirse yaşanan mevsimler belirlenebilir.`,
+        `L bölgesinin Kuzey yarım kürede olduğu ve sıcaklık ölçümünün yapıldığı ay ve gün bilinse de bu bölgede yaşanan mevsim belirlenemez.`
+      ],
+      correct: 1, // B Şıkkı
+      solution: `<b>Doğru Cevap: B</b><br><br><b>Çözüm Açıklaması:</b><br>K ve L şehirlerinin Ekvator'a olan uzaklıkları ile ölçümün hangi gün ve ayda yapıldığı bilinmediği için, bölgelerin bulundukları yarım küreler bilinse dahi yaşanan mevsimler kesin olarak belirlenemez.`
+    },
+    {
+      year: "2022 LGS",
+      unit: `1. ÜNİTE: MEVSİMLER VE İKLİM`,
+      topic: `Mevsimlerin Oluşumu`,
+      image: `soru_8.png`,
+      text1: `Dünya üzerinde bulunan ve şekilde I, II, III ve IV ile numaralanmış, yükseltileri eşit olan bölgelerden III. bölge Ekvator’da; II. ve IV. bölgeler Ekvator’a eşit uzaklıkta yer almaktadır. Numaralanmış bölgelerin herhangi birinde bulunan M şehrine, farklı bir bölgede bulunan N şehrine göre Güneş ışınlarının daha eğik açıyla geldiği ve bu ölçümlerin her iki şehirde de öğle saatinde yapıldığı bilinmektedir.`,
+      text2: `Bu ölçümler sırasında Dünya’nın, Güneş etrafında ocak ayındaki konumunda olduğu bilindiğine göre M ve N şehirlerinin bulunduğu bölgeler aşağıdakilerin hangisindeki gibi olabilir?`,
+      optionsType: `text`,
+      options: [
+        `M şehri → II  |  N şehri → IV`,
+        `M şehri → III  |  N şehri → I`,
+        `M şehri → IV  |  N şehri → II`,
+        `M şehri → II  |  N şehri → I`
+      ],
+      correct: 0, // A Şıkkı
+      solution: `<b>Doğru Cevap: A</b><br><br><b>Çözüm Açıklaması:</b><br>Ocak ayında Güneş ışınları Kuzey Yarım Küre'ye (kış mevsimi yaşandığı için) daha eğik açıyla gelir. M şehrine Güneş ışınları daha eğik geldiğine göre M şehri Kuzey Yarım Küre'de (II. bölge), N şehri ise Güneş ışınlarını daha dik alan Güney Yarım Küre'de (IV. bölge) olmalıdır.`
+    },
+    {
+      year: "2019 LGS",
+      unit: `1. ÜNİTE: MEVSİMLER VE İKLİM`,
+      topic: `Mevsimlerin Oluşumu`,
+      image: `soru_9.png`,
+      text1: `Şekillerde Dünya’nın Güneş etrafında dolanırken oluşan iki farklı konumu, tabloda ise hangi yarım kürede oldukları belirtilmeyen eş yükseltilerdeki K ve L şehirlerinin ocak ve temmuz aylarındaki sıcaklık ortalamaları verilmiştir.`,
+      text2: `Buna göre tablodaki verilerden ve Dünya’nın konumlarından yararlanarak K ve L şehirleri ile ilgili aşağıdaki yargılardan hangisine ulaşılabilir?`,
+      optionsType: `text`,
+      options: [
+        `I. konumundayken L şehrinde yaz mevsimi yaşanır.`,
+        `II. konumundayken K şehrinde kış mevsimi yaşanır.`,
+        `I. konumundayken L şehri, Güneş ışınlarını K şehrinden daha dik açı ile alır.`,
+        `II. konumundayken K şehri, Güneş ışınlarını L şehrinden daha dik açı ile alır.`
+      ],
+      correct: 1, // B Şıkkı
+      solution: `<b>Doğru Cevap: B</b><br><br><b>Çözüm Açıklaması:</b><br>Tablodaki sıcaklık ortalamalarına bakıldığında; K şehrinde Temmuz ayının Ocak ayından daha sıcak olması bu şehrin <b>Kuzey Yarım Küre'de</b> olduğunu gösterir. L şehrinde ise Ocak ayının Temmuz ayından daha sıcak olması bu şehrin <b>Güney Yarım Küre'de</b> olduğunu gösterir.<br><br>Dünya II. konumundayken (21 Aralık tarihi) Kuzey Yarım Küre'de kış mevsimi yaşanır. Dolayısıyla II. konumdayken Kuzey Yarım Küre'deki K şehrinde kış mevsimi yaşanır.`
+    },
+    {
+      year: "2021 LGS",
+      unit: `1. ÜNİTE: MEVSİMLER VE İKLİM`,
+      topic: `İklim ve Hava Hareketleri`,
+      image: ``, 
+      text1: `İklim haritaları oluşturulurken sıcaklık değerlerinden, havadaki nem oranından ve bunlara bağlı olarak gerçekleşen hava olaylarının (kar, dolu, sis vb.) gözlem sonuçlarından faydalanılır.\n\nBuna göre aşağıdakilerden hangisi iklim haritalarının oluşturulmasında diğerlerinden daha fazla veri sağlar?`,
+      text2: ``,
+      optionsType: `text`,
+      options: [
+        `Uzun yıllar boyunca tüm aylarda kaydedilen hava olaylarının ortalamalarının hesaplanması`,
+        `Uzun yıllar boyunca yalnızca yaz aylarında gözlemlenen hava olaylarının ortalamalarının hesaplanması`,
+        `Bir yıl içindeki yağmurlu gün sayısının tespiti ve ortalama yağış miktarlarının hesaplanması`,
+        `Bir gün içinde meydana gelen hava olaylarının ortalamalarının hesaplanması`
+      ],
+      correct: 0, // A Şıkkı
+      solution: `<b>Doğru Cevap: A</b><br><br><b>Çözüm Açıklaması:</b><br>Doğru iklim haritalarının oluşturulabilmesi için uzun yıllar boyunca tüm aylarda kaydedilen hava olaylarının ortalamalarının hesaplanması gerekir.`
+    },
+    {
+      year: "2020 LGS",
+      unit: `1. ÜNİTE: MEVSİMLER VE İKLİM`,
+      topic: `İklim ve Hava Hareketleri`,
+      image: ``, 
+      text1: `Türkiye’de bir bölgede 21 Temmuz 2015 tarihindeki sağanak yağmur; sel ve su taşkınlarına yol açmıştır. Uzmanlar bu yağışın sel ve su taşkınlarına yol açabileceği konusunda insanları daha önceden uyarmıştır.\n\nBu bölgede yaz aylarının genellikle yağışsız ve sıcak olmasına rağmen yaşanan bu durum ile ilgili aşağıdaki yorumlardan hangisi doğrudur?`,
+      text2: ``,
+      optionsType: `text`,
+      options: [
+        `Sel olması bölgenin ikliminin değiştiğini gösterir.`,
+        `Bu tarihte yağmur yağması bölgenin iklim özelliklerinin bir sonucudur.`,
+        `Bu tarihte yağmur yağması bir hava olayıdır.`,
+        `Bu tahmin sadece iklim bilimci tarafından yapılabilir.`
+      ],
+      correct: 2, // C Şıkkı
+      solution: `<b>Doğru Cevap: C</b><br><br><b>Çözüm Açıklaması:</b><br>Sadece belli bir tarihten bahsedildiği için ve uzun süreye dayalı bir veri olmadığı için bu durum bir hava olayıdır.`
+    },
+    {
+      year: "2025 LGS",
+      unit: `1. ÜNİTE: MEVSİMLER VE İKLİM`,
+      topic: `Mevsimlerin Oluşumu`,
+      image: `soru_12.png`,
+      text1: `Yerküre üzerinde eş yükseltide bulunan K ve L şehirlerinde uzun yıllar boyunca yapılan ölçümlerden elde edilen aylık ortalama sıcaklık değerleri tablodaki gibidir.\n\nTablodaki verilerden yararlanılarak K şehrinin Kuzey yarım kürede, L şehrinin Güney yarım kürede olduğu tespit edilmiştir.`,
+      text2: `Bu tespit, aşağıdaki verilerin hangisinden yararlanılarak yapılmıştır?`,
+      optionsType: `text`,
+      options: [
+        `Ortalama sıcaklık değerinin K şehrinde temmuz ve ağustos aylarında aynı, L şehrinde ise haziran ve temmuz aylarında aynı olması`,
+        `Ocak ayı dışındaki tüm aylarda ortalama sıcaklık değerinin K şehrinde L şehrindekinden daha fazla olması`,
+        `Ocak ayından haziran ayına kadar ortalama sıcaklık değerinin K şehrinde artarken L şehrinde azalması`,
+        `Her iki şehirde de ocak ayı ortalama sıcaklık değerlerinin birbirine eşit olması`
+      ],
+      correct: 2, // C Şıkkı
+      solution: `<b>Doğru Cevap: C</b><br><br><b>Çözüm Açıklaması:</b><br>Verilen tabloya göre Ocak ayından haziran ayına kadar ortalama sıcaklık değerinin K şehrinde artarken L şehrinde azaldığı görülmektedir. Bu durumda K şehrinin KYK'de L şehrinin de GYK'de olduğu anlaşılır.`
+    }
+  ];
+
+  let currentIndex = 0;
+  let selectedOptionIndex = null;
+
+  function loadQuestion(index) {
+    const q = questionBank[index];
+    selectedOptionIndex = null;
+    
+    document.getElementById('badgeUnit').innerText = q.unit;
+    document.getElementById('badgeTopic').innerText = q.topic;
+    document.getElementById('badgeNumber').innerText = `Soru: ${index + 1}/${questionBank.length} • ${q.year}`;
+    
+    document.getElementById('qText1').innerText = q.text1;
+    document.getElementById('qText2').innerText = q.text2;
+    
+    const imageBox = document.getElementById('imageBox');
+    const imgEl = document.getElementById('qImage');
+    const fallbackEl = document.getElementById('fallbackText');
+    
+    if (q.image && q.image.trim() !== '') {
+      imageBox.style.display = 'flex';
+      fallbackEl.style.display = 'none';
+      imgEl.style.display = 'block';
+      imgEl.src = q.image;
+      document.getElementById('missingImageName').innerText = q.image;
+    } else {
+      imageBox.style.display = 'none';
+    }
+
+    const optionsContainer = document.getElementById('optionsContainer');
+    optionsContainer.innerHTML = '';
+    const letters = ['A', 'B', 'C', 'D'];
+    
+    q.options.forEach((optValue, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      
+      if (q.optionsType === "image") {
+        btn.innerHTML = `<b>${letters[i]})</b>&nbsp;<img src="${optValue}" class="option-img" alt="${letters[i]} Şıkkı Görseli" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'30\'><text x=\'0\' y=\'20\' fill=\'red\'>Görsel Yok (${optValue})</text></svg>';">`;
+      } else {
+        btn.innerHTML = `<b>${letters[i]})</b>&nbsp;${optValue}`;
+      }
+
+      btn.onclick = () => selectOption(i);
+      optionsContainer.appendChild(btn);
+    });
+
+    document.getElementById('solutionPanel').style.display = 'none';
+    
+    let fullSolutionHTML = q.solution;
+    if (q.solutionImage) {
+      fullSolutionHTML += `<br><img src="${q.solutionImage}" class="solution-img" alt="Çözüm Görseli" onerror="this.style.display='none'">`;
+    }
+    document.getElementById('textSolution').innerHTML = fullSolutionHTML;
+
+    document.getElementById('prevBtn').disabled = (index === 0);
+    document.getElementById('nextBtn').disabled = (index === questionBank.length - 1);
+  }
+
+  function handleImageError() {
+    document.getElementById('qImage').style.display = 'none';
+    document.getElementById('fallbackText').style.display = 'block';
+  }
+
+  function selectOption(index) {
+    selectedOptionIndex = index;
+    const buttons = document.querySelectorAll('.option-btn');
+    buttons.forEach((btn, i) => {
+      btn.classList.toggle('selected', i === index);
+    });
+  }
+
+  function checkAnswer() {
+    if (selectedOptionIndex === null) {
+      alert("Lütfen önce bir şık seçiniz!");
+      return;
+    }
+    
+    const q = questionBank[currentIndex];
+    const buttons = document.querySelectorAll('.option-btn');
+    
+    buttons.forEach((btn, i) => {
+      btn.classList.remove('correct', 'wrong');
+      if (i === q.correct) {
+        btn.classList.add('correct');
+      } else if (i === selectedOptionIndex) {
+        btn.classList.add('wrong');
+      }
+    });
+    
+    document.getElementById('solutionPanel').style.display = 'block';
+  }
+
+  function changeQuestion(step) {
+    currentIndex += step;
+    if (currentIndex >= 0 && currentIndex < questionBank.length) {
+      loadQuestion(currentIndex);
+    }
+  }
+
+  loadQuestion(0);
+</script>
+
+</body>
+</html>
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Soru Bankası</h1>
+    <h1>12 Soruluk Soru Bankam</h1>
 
-    <!-- ÖRNEK SORU 1 -->
-    <div class="question-card">
-        <div class="question-text">1. Türkiye'nin başkenti neresidir?</div>
-        <div class="options">
-            <button class="option-btn" onclick="checkAnswer(this, false)">A) İstanbul</button>
-            <button class="option-btn" onclick="checkAnswer(this, true)">B) Ankara</button>
-            <button class="option-btn" onclick="checkAnswer(this, false)">C) İzmir</button>
-        </div>
-        <div class="answer-box">Doğru Cevap: B (Ankara Türkiye'nin başkentidir.)</div>
-    </div>
-
-    <!-- ÖRNEK SORU 2 -->
-    <div class="question-card">
-        <div class="question-text">2. Hangisi bir programlama dilidir?</div>
-        <div class="options">
-            <button class="option-btn" onclick="checkAnswer(this, true)">A) Python</button>
-            <button class="option-btn" onclick="checkAnswer(this, false)">B) HTML</button>
-            <button class="option-btn" onclick="checkAnswer(this, false)">C) CSS</button>
-        </div>
-        <div class="answer-box">Doğru Cevap: A (Python bir programlama dilidir.)</div>
-    </div>
+    <!-- Buraya sorular eklenecek -->
 
 </div>
 
