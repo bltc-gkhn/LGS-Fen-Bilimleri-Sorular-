@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soru Bankası</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .container { max-width: 650px; width: 100%; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 25px; font-size: 24px; }
+        .question-card { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .question-text { font-weight: 600; font-size: 16px; margin-bottom: 15px; color: #2c3e50; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { background: #fff; border: 1px solid #cbd5e1; padding: 12px 15px; border-radius: 6px; text-align: left; font-size: 14px; cursor: pointer; transition: all 0.2s; }
+        .option-btn:hover { background: #edf2f7; }
+        .option-btn.correct { background-color: #d1fae5; border-color: #10b981; color: #065f46; font-weight: bold; }
+        .option-btn.wrong { background-color: #fee2e2; border-color: #ef4444; color: #991b1b; }
+        .answer-box { margin-top: 12px; padding: 10px; background: #e0f2fe; border-left: 4px solid #0284c7; border-radius: 4px; font-size: 14px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Soru Bankası</h1>
+
+    <!-- ÖRNEK SORU 1 -->
+    <div class="question-card">
+        <div class="question-text">1. Türkiye'nin başkenti neresidir?</div>
+        <div class="options">
+            <button class="option-btn" onclick="checkAnswer(this, false)">A) İstanbul</button>
+            <button class="option-btn" onclick="checkAnswer(this, true)">B) Ankara</button>
+            <button class="option-btn" onclick="checkAnswer(this, false)">C) İzmir</button>
+        </div>
+        <div class="answer-box">Doğru Cevap: B (Ankara Türkiye'nin başkentidir.)</div>
+    </div>
+
+    <!-- ÖRNEK SORU 2 -->
+    <div class="question-card">
+        <div class="question-text">2. Hangisi bir programlama dilidir?</div>
+        <div class="options">
+            <button class="option-btn" onclick="checkAnswer(this, true)">A) Python</button>
+            <button class="option-btn" onclick="checkAnswer(this, false)">B) HTML</button>
+            <button class="option-btn" onclick="checkAnswer(this, false)">C) CSS</button>
+        </div>
+        <div class="answer-box">Doğru Cevap: A (Python bir programlama dilidir.)</div>
+    </div>
+
+</div>
+
+<script>
+    function checkAnswer(btn, isCorrect) {
+        const parent = btn.parentElement;
+        const buttons = parent.querySelectorAll('.option-btn');
+        buttons.forEach(b => b.disabled = true);
+        
+        if(isCorrect) {
+            btn.classList.add('correct');
+        } else {
+            btn.classList.add('wrong');
+        }
+        
+        const answerBox = parent.nextElementSibling;
+        if(answerBox && answerBox.classList.contains('answer-box')) {
+            answerBox.style.display = 'block';
+        }
+    }
+</script>
+
+</body>
+</html>
